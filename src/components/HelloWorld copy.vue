@@ -30,64 +30,59 @@ onMounted(() => {
   }).addTo(mapDom)
 
   data.data.forEach(val => {
-    const pictures = L.marker(val.location, {
-      icon: L.divIcon({
-        className: 'leaflet-echart-icon',
-        iconSize: [160, 160],
-        html: '<div id="marker' + val.id + '" style="width: 160px; height: 160px; position: relative; background-color: transparent;">asd</div>'
-      })
-    }).addTo(mapDom)
+    const marker = L.marker(val.location).addTo(mapDom)
 
-    const myChart = echart.init(document.getElementById('marker' + val.id)!)
+    const content = '<div style="width: 220px; height: 220px;" id="marker' + val.id + '"></div>'
 
-    const option = {
-      tooltip: {
-        trigger: 'item',
-        formatter: '{a} <br/>{b}: {c} ({d}%)'
-      },
-      series: [{
-        name: '访问来源',
-        type: 'pie',
-        radius: ['20', '50'],
-        avoidLabelOverlap: false,
-        label: {
-          normal: {
-            show: false,
-            position: 'center'
-          },
-          emphasis: {
-            show: true,
-            textStyle: {
-              fontSize: '18',
-              fontWeight: 'bold'
-            }
-          }
+    marker.bindPopup(content, {})
+    marker.on('popupopen', function (e) {
+      const myChart = echart.init(document.getElementById('marker' + val.id)!)
+
+      const option = {
+        tooltip: {
+          trigger: 'axis'
         },
-        labelLine: {
-          normal: {
-            show: false
+        xAxis: [{
+          type: 'category',
+          data: ['1月', '2月', '3月', '4月']
+        }],
+        yAxis: [{
+          type: 'value',
+          name: '水量',
+          min: 0,
+          max: 50,
+          interval: 50,
+          axisLabel: {
+            formatter: '{value} ml'
           }
-        },
-        data: [{
-          value: val.value1,
-          name: '直接访问'
         }, {
-          value: val.value2,
-          name: '邮件营销'
+          type: 'value',
+          name: '温度',
+          min: 0,
+          max: 10,
+          interval: 5,
+          axisLabel: {
+            formatter: '{value} °C'
+          }
+        }],
+        series: [{
+          name: '蒸发量',
+          type: 'bar',
+          data: [2.0, 4.9, 7.0, 23.2]
         }, {
-          value: val.value3,
-          name: '联盟广告'
+          name: '降水量',
+          type: 'bar',
+          data: [2.6, 5.9, 9.0, 26.4]
         }, {
-          value: val.value4,
-          name: '视频广告'
-        }, {
-          value: 20,
-          name: '搜索引擎'
+          name: '平均温度',
+          type: 'line',
+          yAxisIndex: 1,
+          data: [2.0, 2.2, 3.3, 4.5]
         }]
-      }]
-    }
+      }
 
-    myChart.setOption(option)
+      myChart.setOption(option)
+    })
   })
 })
 </script>

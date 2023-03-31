@@ -8,6 +8,8 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "echarts": "^5.4.2",
+    "leaflet": "^1.9.3",
     "vue": "^3.2.13"
   },
   "devDependencies": {
@@ -40,7 +42,10 @@
     "parserOptions": {
       "ecmaVersion": 2020
     },
-    "rules": {}
+    "rules": {
+      "no-debugger": 0,
+      "@typescript-eslint/no-var-requires": "off"
+    }
   },
   "browserslist": [
     "> 1%",
